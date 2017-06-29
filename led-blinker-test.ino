@@ -16,25 +16,36 @@ bool ledBrightnessFading[] = {true, true, false};
 int brightness = 0; 
 int fadeAmount = 5;
 
+struct led {
+  // The pin where led is
+  int pin;
+  // The brightness we last set for led
+  int brightness;
+  // The amount to change the brightness
+  int brightnessChange;
+};
+
+typedef struct led Led;
+
+const Led leds[3];
+
 void setup() {
+  leds[0] = (Led) {9, 0, 5};
+  leds[1] = (Led) {10, 150, 5};
+  leds[2] = (Led) {11, 255, 5};
   // initialize led pin for output
   initializeLedPins();
-  // initialize serial communications at 9600 bps:
-  Serial.begin(9600);
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
-  for (int i = 0; i < sizeof(ledPins); i++) {
-    analogWrite(ledPins[i], ledBrightness[i]);
-    if (ledBrightness[i] <=0 || ledBrightness[i] >= 255) {
-      ledBrightnessFading[i] = !ledBrightnessFading[i];
+  for (int i = 0; i < sizeof(leds); i++) {
+    analogWrite(leds[i].pin, leds[i].brightness);
+    if (leds[i].brightness <=0 || leds[i].brightness >= 255) {
+      // TODO: get random change for brightness
+      // TODO: function for the struct to handle calculating new brightness
+      leds[i].brightnessChange = -leds[i].brightnessChange;
     }
-    if (ledBrightnessFading[i]) {
-      ledBrightness[i] = ledBrightness[i] - fadeAmount;
-    } else {
-      ledBrightness[i] = ledBrightness[i] + fadeAmount;
-    }
+    leds[i].brightness = leds[i].brightness + leds[i].brightnessChange;
   }
 
   delay(30);
@@ -48,10 +59,4 @@ void initializeLedPins() {
 
 void setLedBrightness(int ledPin, int brightness) {
   analogWrite(ledPin, brightness);
-}
-
-void log(String message) {
-  Serial.print("log: ");
-  Serial.print(message);
-  Serial.print("\n");
 }
