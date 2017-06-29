@@ -8,11 +8,6 @@
    - when led is at full power wait for some time before putting it off
 */
 
-const int ledPins[] = { 9, 10, 11 };
-
-int ledBrightness[] = {0, 150, 255};
-bool ledBrightnessFading[] = {true, true, false};
-
 int brightness = 0; 
 int fadeAmount = 5;
 
@@ -39,22 +34,26 @@ void setup() {
 
 void loop() {
   for (int i = 0; i < sizeof(leds); i++) {
+    calculateNewBrightness(i);
     analogWrite(leds[i].pin, leds[i].brightness);
-    if (leds[i].brightness <=0 || leds[i].brightness >= 255) {
-      // TODO: get random change for brightness
-      // TODO: function for the struct to handle calculating new brightness
-      leds[i].brightnessChange = -leds[i].brightnessChange;
-    }
-    leds[i].brightness = leds[i].brightness + leds[i].brightnessChange;
   }
 
   delay(30);
 }
 
 void initializeLedPins() {
-  for (int i = 0; i < sizeof(ledPins); i++) {
-      pinMode(ledPins[i], OUTPUT);
+  for (int i = 0; i < sizeof(leds); i++) {
+      pinMode(leds[i].pin, OUTPUT);
   }
+}
+
+// TODO: bring the led struct as pointer to here
+calculateNewBrightness(int ledIndex) {
+    if (leds[ledIndex].brightness <=0 || leds[ledIndex].brightness >= 255) {
+      // TODO: get random change for brightness
+      leds[ledIndex].brightnessChange = -leds[ledIndex].brightnessChange;
+    }
+    leds[ledIndex].brightness = leds[i].brightness + leds[ledIndex].brightnessChange;
 }
 
 void setLedBrightness(int ledPin, int brightness) {
