@@ -22,7 +22,7 @@ struct led {
 
 typedef struct led Led;
 
-const Led leds[3];
+Led leds[3];
 
 void setup() {
   leds[0] = (Led) {9, 0, 5};
@@ -48,12 +48,12 @@ void initializeLedPins() {
 }
 
 // TODO: bring the led struct as pointer to here
-calculateNewBrightness(int ledIndex) {
+void calculateNewBrightness(int ledIndex) {
     if (leds[ledIndex].brightness <=0 || leds[ledIndex].brightness >= 255) {
       // TODO: get random change for brightness
       leds[ledIndex].brightnessChange = -leds[ledIndex].brightnessChange;
     }
-    leds[ledIndex].brightness = leds[i].brightness + leds[ledIndex].brightnessChange;
+    leds[ledIndex].brightness = leds[ledIndex].brightness + leds[ledIndex].brightnessChange;
 }
 
 void setLedBrightness(int ledPin, int brightness) {
